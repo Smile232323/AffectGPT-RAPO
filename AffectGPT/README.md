@@ -14,17 +14,21 @@ Language Models</a></h3>
 
 ## 🧠 What's New: RAPO Extension
 
-We add a new trainable variant, **AffectGPT-RAPO** (`affectgpt_rapo`), to improve reliable open-vocabulary emotion recognition.
+This repository is **based on the original AffectGPT implementation**
+([`zeroQiaoba/AffectGPT`](https://github.com/zeroQiaoba/AffectGPT)).
+In this fork, we keep the original pipeline and add a new trainable RAPO variant,
+**AffectGPT-RAPO** (`affectgpt_rapo`), for more reliable open-vocabulary emotion recognition.
 
-- **RAPO auxiliary objectives**:
+- **Original baseline preserved**:
+  - original AffectGPT training/inference/evaluation workflow
+- **Our added innovations in this fork**:
   - multi-label emotion supervision head
   - confidence regression head for risk-aware selective prediction
-- **Unified supervision interface**:
+- **Additional training interface added**:
   - automatically extracts supervision from `ovlabel / onehot / sentiment / valence`
   - packaged into the training batch by the dataset collater
-- **Ready-to-run config**:
+- **Added run artifacts**:
   - `train_configs/ovmerd_rapo_train.yaml`
-- **Usage guide**:
   - `RAPO_TRAINING.md`
 
 <img src="assert/demo-description.png" width="800" />

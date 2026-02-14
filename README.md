@@ -17,12 +17,20 @@ EmoPrefer</a></h3>
 
 ## 🧠 Our Innovation (RAPO Extension)
 
-This repository now includes our **RAPO extension** (Risk-Aware Preference + Ontology constraints) for open-vocabulary multimodal emotion recognition.
+This project is a **research extension built on top of the original repository**
+([`zeroQiaoba/AffectGPT`](https://github.com/zeroQiaoba/AffectGPT)).
+We keep the original OV-MER / AffectGPT / EmoPrefer codebase and add our RAPO
+enhancements for reliable open-vocabulary multimodal emotion recognition.
 
-- **Unified auxiliary supervision**: training can consistently leverage `ovlabel`, `onehot`, `sentiment`, and `valence` annotations through one pipeline.
-- **Risk-aware learning signal**: we introduce an auxiliary confidence objective to support selective prediction under uncertainty.
-- **Open-vocabulary label optimization**: a multi-label auxiliary head improves emotion label coverage and robustness.
-- **Plug-and-train integration**: new model architecture `affectgpt_rapo`, training config `AffectGPT/train_configs/ovmerd_rapo_train.yaml`, and usage guide `AffectGPT/RAPO_TRAINING.md`.
+- **Base repository (original work)**: OV-MER, AffectGPT, and EmoPrefer from the
+  official authors.
+- **Our extension (newly added in this fork)**:
+  - unified auxiliary supervision from `ovlabel / onehot / sentiment / valence`
+  - risk-aware confidence objective for selective prediction
+  - open-vocabulary multi-label auxiliary optimization
+  - plug-and-train integration: `affectgpt_rapo`,
+    `AffectGPT/train_configs/ovmerd_rapo_train.yaml`,
+    and `AffectGPT/RAPO_TRAINING.md`
 
 ## ✨ OV-MER
 
