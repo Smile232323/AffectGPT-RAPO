@@ -121,7 +121,13 @@ class AffectGPTRapo(AffectGPT):
         pooled = stacked.mean(dim=1)
         return pooled
 
-    def _compute_rapo_losses(self, pooled_feature, supervision_texts, device):
+    def _compute_rapo_losses(
+        self,
+        pooled_feature,
+        supervision_texts,
+        device,
+        supervision_available=None,
+    ):
         zero = torch.tensor(0.0, device=device)
         if pooled_feature is None:
             return zero, zero
@@ -136,6 +142,15 @@ class AffectGPTRapo(AffectGPT):
             alias_map=self.rapo_alias_map,
         )
         valid = torch.tensor(valid_mask, device=device, dtype=torch.bool)
+
+        if supervision_available is not None:
+            if torch.is_tensor(supervision_available):
+                available = supervision_available.to(device=device).bool()
+            else:
+                available = torch.tensor(supervision_available, device=device, dtype=torch.bool)
+            if available.numel() == valid.numel():
+                valid = valid & available
+
         if valid.sum().item() == 0:
             return zero, zero
 
@@ -245,6 +260,7 @@ class AffectGPTRapo(AffectGPT):
             pooled_feature=pooled_feature,
             supervision_texts=samples.get("supervision_texts", None),
             device=lm_loss.device,
+            supervision_available=samples.get("supervision_available", None),
         )
         loss = (
             lm_loss

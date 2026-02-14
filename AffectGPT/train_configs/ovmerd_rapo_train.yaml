@@ -38,6 +38,8 @@ model:
   rapo_conf_loss_weight: 0.10
   rapo_vocab:
     - neutral
+    - positive
+    - negative
     - joy
     - happy
     - sad

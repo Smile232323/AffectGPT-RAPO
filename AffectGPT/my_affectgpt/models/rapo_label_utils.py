@@ -1,11 +1,13 @@
 import re
 import math
 import json
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 
 DEFAULT_RAPO_VOCAB = [
     "neutral",
+    "positive",
+    "negative",
     "joy",
     "happy",
     "sad",
@@ -42,16 +44,27 @@ DEFAULT_ALIAS = {
     "disgusted": "disgust",
     "frustration": "frustrated",
     "excitement": "excited",
+    "positivity": "positive",
+    "negativity": "negative",
+    "pos": "positive",
+    "neg": "negative",
 }
 
 
 def _clean_label_text(text: str) -> str:
-    text = text.strip().lower()
-    text = text.replace("the character's emotional state is", " ")
-    text = text.replace("the character's sentiment state is", " ")
-    text = text.replace("the most likely label is", " ")
-    text = text.replace("emotion", " ")
-    text = text.replace("state", " ")
+    text = text.strip().lower().replace("’", "'")
+    # Remove common response templates only (exact phrase-level),
+    # but never strip generic substrings like "emotion"/"state" globally.
+    template_patterns = [
+        r"\bthe character'?s emotional state is\b",
+        r"\bthe character'?s sentiment state is\b",
+        r"\bthe most likely label is\b",
+        r"\bemotional state is\b",
+        r"\bsentiment state is\b",
+        r"\bemotion labels? are\b",
+    ]
+    for pattern in template_patterns:
+        text = re.sub(pattern, " ", text)
     text = re.sub(r"[^a-z0-9,;/\-\s]", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text
