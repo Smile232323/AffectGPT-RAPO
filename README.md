@@ -22,15 +22,25 @@ This project is a **research extension built on top of the original repository**
 We keep the original OV-MER / AffectGPT / EmoPrefer codebase and add our RAPO
 enhancements for reliable open-vocabulary multimodal emotion recognition.
 
-- **Base repository (original work)**: OV-MER, AffectGPT, and EmoPrefer from the
-  official authors.
-- **Our extension (newly added in this fork)**:
-  - unified auxiliary supervision from `ovlabel / onehot / sentiment / valence`
-  - risk-aware confidence objective for selective prediction
-  - open-vocabulary multi-label auxiliary optimization
-  - plug-and-train integration: `affectgpt_rapo`,
-    `AffectGPT/train_configs/ovmerd_rapo_train.yaml`,
-    and `AffectGPT/RAPO_TRAINING.md`
+**Base repository (original work)**:
+- OV-MER, AffectGPT, and EmoPrefer from the official authors.
+
+**Our innovations in this fork (new code, not in upstream)**:
+1. **RAPO trainable model (`affectgpt_rapo`)**
+   - Adds two auxiliary objectives on top of the original LM loss:
+   - multi-label emotion supervision loss
+   - confidence regression loss for risk-aware selective prediction
+   - Code: `AffectGPT/my_affectgpt/models/affectgpt_rapo.py`
+2. **Unified supervision extraction across label types**
+   - Unifies `ovlabel / onehot / sentiment / valence` into one supervision interface
+   - Added at dataset and collater level for direct training-time usage
+   - Code: `AffectGPT/my_affectgpt/datasets/datasets/base_dataset.py`
+3. **Open-vocabulary label processing utilities**
+   - Adds vocabulary management, alias normalization, multi-hot target building, and confidence target mapping
+   - Code: `AffectGPT/my_affectgpt/models/rapo_label_utils.py`
+4. **Plug-and-train RAPO config and guide**
+   - Ready-to-run training config: `AffectGPT/train_configs/ovmerd_rapo_train.yaml`
+   - Documentation: `AffectGPT/RAPO_TRAINING.md`
 
 ## ✨ OV-MER
 

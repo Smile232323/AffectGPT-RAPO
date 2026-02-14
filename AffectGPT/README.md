@@ -19,17 +19,24 @@ This repository is **based on the original AffectGPT implementation**
 In this fork, we keep the original pipeline and add a new trainable RAPO variant,
 **AffectGPT-RAPO** (`affectgpt_rapo`), for more reliable open-vocabulary emotion recognition.
 
-- **Original baseline preserved**:
-  - original AffectGPT training/inference/evaluation workflow
-- **Our added innovations in this fork**:
-  - multi-label emotion supervision head
-  - confidence regression head for risk-aware selective prediction
-- **Additional training interface added**:
-  - automatically extracts supervision from `ovlabel / onehot / sentiment / valence`
-  - packaged into the training batch by the dataset collater
-- **Added run artifacts**:
-  - `train_configs/ovmerd_rapo_train.yaml`
-  - `RAPO_TRAINING.md`
+**Original baseline preserved**:
+- original AffectGPT training/inference/evaluation workflow
+
+**Our concrete innovations in this fork (newly added)**:
+1. **RAPO dual-head auxiliary learning**
+   - multi-label emotion supervision head
+   - confidence regression head for selective prediction
+   - file: `my_affectgpt/models/affectgpt_rapo.py`
+2. **Cross-task unified supervision interface**
+   - automatically extracts supervision from `ovlabel / onehot / sentiment / valence`
+   - packages supervision into the training batch via dataset collater
+   - file: `my_affectgpt/datasets/datasets/base_dataset.py`
+3. **Open-vocabulary label utility module**
+   - alias normalization + multi-hot conversion + confidence target mapping
+   - file: `my_affectgpt/models/rapo_label_utils.py`
+4. **Directly runnable RAPO training recipe**
+   - `train_configs/ovmerd_rapo_train.yaml`
+   - `RAPO_TRAINING.md`
 
 <img src="assert/demo-description.png" width="800" />
 

@@ -7,6 +7,15 @@ This repo now includes a trainable RAPO extension:
   - multi-label emotion supervision (`rapo_aux_loss_weight`)
   - confidence supervision for selective prediction (`rapo_conf_loss_weight`)
 
+## 0) What is newly added in this fork
+
+Compared with the upstream repository, this fork newly adds:
+
+- `my_affectgpt/models/affectgpt_rapo.py`: RAPO model with dual-head auxiliary objectives.
+- `my_affectgpt/models/rapo_label_utils.py`: open-vocabulary label normalization and target construction utilities.
+- `my_affectgpt/datasets/datasets/base_dataset.py` updates: unified supervision extraction from `ovlabel / onehot / sentiment / valence`.
+- `train_configs/ovmerd_rapo_train.yaml`: ready-to-run RAPO training config.
+
 ## 1) Run training
 
 ```bash
