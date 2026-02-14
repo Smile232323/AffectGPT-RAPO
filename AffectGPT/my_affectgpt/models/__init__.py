@@ -14,6 +14,7 @@ from my_affectgpt.common.registry import registry
 from my_affectgpt.models.base_model import BaseModel
 from my_affectgpt.models.blip2 import Blip2Base
 from my_affectgpt.models.affectgpt import AffectGPT
+from my_affectgpt.models.affectgpt_rapo import AffectGPTRapo
 from my_affectgpt.processors.base_processor import BaseProcessor
 from my_affectgpt.models.tokenizer import *
 
@@ -23,6 +24,7 @@ __all__ = [
     "BaseModel",
     "Blip2Base",
     "AffectGPT",
+    "AffectGPTRapo",
 ]
 
 

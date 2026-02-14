@@ -460,6 +460,34 @@ class BaseDataset():
 
         return candidates[label_type] # 包含 question, answer 两部分内容
 
+    # Build a stable supervision signal used by auxiliary objectives.
+    # Priority: ovlabel > onehot > sentiment > valence.
+    def get_supervision_signal(self, sample):
+        if "ovlabel" in sample and sample["ovlabel"] is not None:
+            text = str(sample["ovlabel"]).strip()
+            if text != "":
+                return text, "ovlabel", 1
+
+        if "onehot" in sample and sample["onehot"] is not None:
+            text = str(sample["onehot"]).strip()
+            if text != "":
+                return text, "onehot", 1
+
+        if "sentiment" in sample and sample["sentiment"] is not None:
+            text = str(sample["sentiment"]).strip()
+            if text != "":
+                return text, "sentiment", 1
+
+        if "valence" in sample and sample["valence"] is not None:
+            try:
+                valence = float(sample["valence"])
+                sentiment = self.func_map_valence_to_emotion(valence)
+                return sentiment, "valence", 1
+            except Exception:
+                pass
+
+        return "", "none", 0
+
 
     def get_prompt_for_multimodal(self, face_or_frame, subtitle, user_message):
 
@@ -586,6 +614,7 @@ class BaseDataset():
                 # step2: read (question, answer)
                 # => 如果 sample 中缺少 qa 对应内容的信息，结果是会报错的
                 qa_pair = self.get_qa_pairs(self.dataset, cur_label_type, sample)
+                supervision_text, supervision_kind, supervision_available = self.get_supervision_signal(sample)
                 # print (qa_pair)
 
                 # step4: generate (text_input, label)
@@ -631,6 +660,9 @@ class BaseDataset():
             "text_input": text_input,
             'dataset': self.dataset.lower(),
             'face_or_frame': self.face_or_frame,
+            "supervision_text": supervision_text,
+            "supervision_kind": supervision_kind,
+            "supervision_available": supervision_available,
         }
 
         
@@ -692,6 +724,12 @@ class BaseDataset():
         
         batch['dataset'] = instances[0]['dataset']
         batch['face_or_frame'] = instances[0]['face_or_frame']
+        batch["supervision_texts"] = [instance.get("supervision_text", "") for instance in instances]
+        batch["supervision_kinds"] = [instance.get("supervision_kind", "none") for instance in instances]
+        batch["supervision_available"] = torch.tensor(
+            [int(instance.get("supervision_available", 0)) for instance in instances],
+            dtype=torch.long,
+        )
         return batch
     
 
