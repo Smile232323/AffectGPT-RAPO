@@ -12,6 +12,21 @@ Language Models</a></h3>
 
 </h5>
 
+## 🧠 What's New: RAPO Extension
+
+We add a new trainable variant, **AffectGPT-RAPO** (`affectgpt_rapo`), to improve reliable open-vocabulary emotion recognition.
+
+- **RAPO auxiliary objectives**:
+  - multi-label emotion supervision head
+  - confidence regression head for risk-aware selective prediction
+- **Unified supervision interface**:
+  - automatically extracts supervision from `ovlabel / onehot / sentiment / valence`
+  - packaged into the training batch by the dataset collater
+- **Ready-to-run config**:
+  - `train_configs/ovmerd_rapo_train.yaml`
+- **Usage guide**:
+  - `RAPO_TRAINING.md`
+
 <img src="assert/demo-description.png" width="800" />
 
 ## 🛠️ Requirements and Installation

@@ -15,6 +15,15 @@ EmoPrefer</a></h3>
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](AffectGPT/LICENSE)
 </h5>
 
+## 🧠 Our Innovation (RAPO Extension)
+
+This repository now includes our **RAPO extension** (Risk-Aware Preference + Ontology constraints) for open-vocabulary multimodal emotion recognition.
+
+- **Unified auxiliary supervision**: training can consistently leverage `ovlabel`, `onehot`, `sentiment`, and `valence` annotations through one pipeline.
+- **Risk-aware learning signal**: we introduce an auxiliary confidence objective to support selective prediction under uncertainty.
+- **Open-vocabulary label optimization**: a multi-label auxiliary head improves emotion label coverage and robustness.
+- **Plug-and-train integration**: new model architecture `affectgpt_rapo`, training config `AffectGPT/train_configs/ovmerd_rapo_train.yaml`, and usage guide `AffectGPT/RAPO_TRAINING.md`.
+
 ## ✨ OV-MER
 
 **OV-MER** transitions from *traditional MER* to a framework that enables the prediction of *any number and category of emotions*, thereby advancing emotion AI toward real-world applicability by capturing the full spectrum of human emotions.
