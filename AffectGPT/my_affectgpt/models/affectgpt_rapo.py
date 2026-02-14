@@ -148,8 +148,12 @@ class AffectGPTRapo(AffectGPT):
                 available = supervision_available.to(device=device).bool()
             else:
                 available = torch.tensor(supervision_available, device=device, dtype=torch.bool)
-            if available.numel() == valid.numel():
-                valid = valid & available
+            if available.numel() != valid.numel():
+                raise ValueError(
+                    f"supervision_available size mismatch: "
+                    f"{available.numel()} vs {valid.numel()}"
+                )
+            valid = valid & available
 
         if valid.sum().item() == 0:
             return zero, zero
@@ -157,16 +161,17 @@ class AffectGPTRapo(AffectGPT):
         target_tensor = torch.tensor(
             targets,
             device=device,
-            dtype=pooled_feature.dtype,
+            dtype=torch.float32,
         )
-        logits = self.rapo_label_head(pooled_feature)
+        # Compute auxiliary losses in fp32 for better numerical stability.
+        logits = self.rapo_label_head(pooled_feature).float()
         aux_loss = F.binary_cross_entropy_with_logits(
             logits[valid], target_tensor[valid], reduction="mean"
         )
 
         conf_target = [label_count_to_confidence(x) for x in label_counts]
-        conf_target = torch.tensor(conf_target, device=device, dtype=pooled_feature.dtype)
-        conf_pred = torch.sigmoid(self.rapo_conf_head(pooled_feature)).squeeze(-1)
+        conf_target = torch.tensor(conf_target, device=device, dtype=torch.float32)
+        conf_pred = torch.sigmoid(self.rapo_conf_head(pooled_feature).float()).squeeze(-1)
         conf_loss = F.smooth_l1_loss(conf_pred[valid], conf_target[valid], reduction="mean")
         return aux_loss, conf_loss
 
